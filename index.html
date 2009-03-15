@@ -73,7 +73,7 @@
     <h2>Use</h2>
     <p>
       Usage is simple.  Just pass either a hash of options, or a block, to
-      <code>AppConfig.configure</code>.  See AppConfig::Base for a list of valid options.
+      <code>AppConfig.setup</code>.  See AppConfig::Base for a list of valid options.
  
       For example, given this YAML file:
 
@@ -89,12 +89,12 @@ api_key:     'SUPERAWESOMESERVICE'
 <pre>
 require 'app_config'
 
-AppConfig.configure do |config|
-  config.storage_method = :yaml
-  config.path = '/path/to/app_config.yml'
+AppConfig.setup do |config|
+  config[:storage_method] = :yaml
+  config[:path] = '/path/to/app_config.yml'
 end
 
-AppConfig[admin_email]  # => 'admin@example.com'
+AppConfig[:admin_email]  # => 'admin@example.com'
 AppConfig[:api_name]    # => 'Supr Webz 2.0'
 AppConfig[:api_key]     # => 'SUPERAWESOMESERVICE'
 </pre>
@@ -102,9 +102,9 @@ AppConfig[:api_key]     # => 'SUPERAWESOMESERVICE'
       Want SQLite3 support?  No problem!
 
 <pre>
-AppConfig.configure do |config|
-  config.storage_method = :sqlite
-  config.database = '/path/to/database.sqlite3'
+AppConfig.setup do |config|
+  config[:storage_method] = :sqlite
+  config[:database] = '/path/to/database.sqlite3'
 end
 
 AppConfig[:column]  # => 'value'
