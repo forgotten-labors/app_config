@@ -104,6 +104,7 @@ AppConfig[:api_key]     # => 'SUPERAWESOMESERVICE'
 <pre>
 AppConfig.setup do |config|
   config[:storage_method] = :sqlite
+  config[:table] = 'app_config'
   config[:database] = '/path/to/database.sqlite3'
 end
 
