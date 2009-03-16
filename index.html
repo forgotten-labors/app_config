@@ -115,6 +115,12 @@ end
 AppConfig[:column]  # => 'value'
 </pre>
 
+    <p>You can also pass a uri option, which will automatically determine the options for the storage method. So in the block (or passed in hash):</p>
+<pre>
+config[:uri] = 'sqlite:///path/to/database.sqlite3'
+config[:uri] = 'yaml:///path/to/app_config.yml'
+</pre>
+
     </p>
 
     <h2>Read</h2>
