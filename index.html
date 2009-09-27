@@ -10,7 +10,7 @@
 	<style type="text/css">
 		body {
   		margin-top: 1.0em;
-  		background-color: #8ae4ea;
+  		background-color: #eee;
 		  font-family: "helvetica";
   		color: #000000;
     }
@@ -56,7 +56,7 @@
       Quick and easy application configuration.
     </div>
 
-    <p>An easy to use, customizable library to easily store and retrieve application configuration, API keys or basically anything in 'key => value' pairs.</p>
+    <p>An easy to use, customizable library to easily store and retrieve application configuration, API keys or basically anything in 'key/value' pairs.</p>
 
     <h2>Author</h2>
     <p>
@@ -98,12 +98,14 @@ AppConfig.setup do |config|
   config[:path] = '/path/to/app_config.yml'
 end
 
-AppConfig[:admin_email]  # => 'admin@example.com'
-AppConfig[:api_name]    # => 'Supr Webz 2.0'
-AppConfig[:api_key]     # => 'SUPERAWESOMESERVICE'
+# Later on...
+# Strings or symbols as keys.
+AppConfig['admin_email']  # =&gt; 'admin@example.com'
+AppConfig[:api_name]      # =&gt; 'Supr Webz 2.0'
+AppConfig[:api_key]       # =&gt; 'SUPERAWESOMESERVICE'
 </pre>
 
-      Want SQLite3 support?  No problem!
+      Want SQLite3?  No problem!
 
 <pre>
 AppConfig.setup do |config|
@@ -115,10 +117,10 @@ end
 AppConfig[:column]  # => 'value'
 </pre>
 
-    <p>You can also pass a uri option, which will automatically determine the options for the storage method. So in the block (or passed in hash):</p>
+    <p>You can also pass a <code>:uri</code> option, which will automatically determine the options for the storage method. So in the block (or passed in hash):</p>
 <pre>
-config[:uri] = 'sqlite:///path/to/database.sqlite3'
-config[:uri] = 'yaml:///path/to/app_config.yml'
+config[:uri] = 'sqlite://path/to/database.sqlite3'
+config[:uri] = 'yaml://path/to/app_config.yml'
 </pre>
 
     </p>
