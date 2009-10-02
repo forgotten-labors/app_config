@@ -116,12 +116,11 @@ AppConfig[:column]  # => 'value'
 
     </p>
 
-    <h2>Rails Mode</h2>
+    <h2>Environment Mode</h2>
     <p>
-      As of version 0.3.1, there's a 'Rails mode' where you can organize
-      the config file sort of like Rails' database config.
+      As of version 0.4.0, there's an 'environment mode' where you can organize the config file
+      sort of like Rails' database config.
       <br />
-      <strong>*NOTE:*</strong> This might get renamed to a more Rack-ish 'environment' mode.
     </p>
 
 <pre>
@@ -132,15 +131,15 @@ production:
   name: 'Production Mode'
 </pre>
 
-      <p>Then set the <tt>:rails</tt> option to true (it's false by default).</p>
+    <p>Then set the <tt>:env</tt> option to your desired environment.</p>
 
 <pre>
 AppConfig.setup do |config|
-  config[:rails] = true
+  config[:env] = Rails.env  # or any string.
   config[:uri] = 'yaml://path/to/app_config.yml'
 end
 
-# If Rails.env is 'production'
+# Uses the given environment section of the config.
 AppConfig[:name] = 'Production Mode'
 </pre>
 
