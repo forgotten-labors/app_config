@@ -49,7 +49,7 @@
 
     <h1>
       <a href="http://github.com/Oshuma/app_config">app_config</a>
-      <span class="small">by <a href="http://github.com/Oshuma">Oshuma</a></small>
+      <span class="small">by <a href="http://oshuma.github.com/">Oshuma</a></small>
     </h1>
 
     <div class="description">
@@ -58,19 +58,10 @@
 
     <p>An easy to use, customizable library to easily store and retrieve application configuration, API keys or basically anything in 'key/value' pairs.</p>
 
-    <h2>Author</h2>
-    <p>
-      Dale Campbell<br />
-      dale@save-state.net<br/>
-      <a href="http://corrupt.save-state.net/" title="http://corrupt.save-state.net/">http://corrupt.save-state.net/</a>
-    </p>
-
     <h2>Install</h2>
     <p>
-      From Rubyforge:
-      <pre>$ sudo gem install app_config</pre>
-      From Github:
-      <pre>$ sudo gem install Oshuma-app_config --source http://gems.github.com/</pre>
+      From Gemcutter:
+      <pre>$ sudo gem install app_config --source http://gemcutter.org</pre>
     </p>
 
 
@@ -96,7 +87,10 @@ require 'app_config'
 AppConfig.setup do |config|
   config[:storage_method] = :yaml
   config[:path] = '/path/to/app_config.yml'
+  # ..or..
+  config[:uri] = 'yaml://path/to/app_config.yml'
 end
+
 
 # Later on...
 # Strings or symbols as keys.
@@ -111,27 +105,49 @@ AppConfig[:api_key]       # =&gt; 'SUPERAWESOMESERVICE'
 AppConfig.setup do |config|
   config[:storage_method] = :sqlite
   config[:database] = '/path/to/database.sqlite3'
-  config[:table] = 'app_config'
+  # ..or..
+  config[:uri] = 'sqlite://path/to/database.sqlite3'
+
+  config[:table] = 'app_config' # defaults to 'app_config'
 end
 
 AppConfig[:column]  # => 'value'
 </pre>
 
-    <p>You can also pass a <code>:uri</code> option, which will automatically determine the options for the storage method. So in the block (or passed in hash):</p>
+    </p>
+
+    <h2>Rails Mode</h2>
+    <p>
+      As of version 0.3.1, there's a 'Rails mode' where you can organize
+      the config file sort of like Rails' database config.
+      <br />
+      <strong>*NOTE:*</strong> This might get renamed to a more Rack-ish 'environment' mode.
+    </p>
+
 <pre>
-config[:uri] = 'sqlite://path/to/database.sqlite3'
-config[:uri] = 'yaml://path/to/app_config.yml'
+development:
+  name: 'Dev Mode'
+
+production:
+  name: 'Production Mode'
 </pre>
 
-    </p>
+      <p>Then set the <tt>:rails</tt> option to true (it's false by default).</p>
 
-    <h2>Read</h2>
-    <p>
-      See the <a href="http://rubyforge.org/projects/app-config/" title="http://rubyforge.org/projects/app-config/">RubyForge</a> project
-      for <a href="http://app-config.rubyforge.org/" title="http://app-config.rubyforge.org/">documentation</a>.
-    </p>
+<pre>
+AppConfig.setup do |config|
+  config[:rails] = true
+  config[:uri] = 'yaml://path/to/app_config.yml'
+end
+
+# If Rails.env is 'production'
+AppConfig[:name] = 'Production Mode'
+</pre>
 
     <h2>Code</h2>
+    <p>
+      File any bug reports here: <a href="http://github.com/Oshuma/app_config/issues/" title="AppConfig Issues">http://github.com/Oshuma/app_config/issues/</a>
+    </p>
     <p>
       You can download the code for this project in either
       <a href="http://github.com/Oshuma/app_config/zipball/master">zip</a> or
