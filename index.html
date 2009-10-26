@@ -70,7 +70,18 @@
       Usage is simple.  Just pass either a hash of options, or a block, to
       <code>AppConfig.setup</code>.  See AppConfig::Base for a list of valid options.
 
-      For example, given this YAML file:
+      As of version 0.4.1, if the <tt>:storage_method</tt> is not set, AppConfig
+      will act pretty much just like a normal Hash:
+
+<pre>
+AppConfig.setup(:email => 'admin@example.com')
+AppConfig[:email]    # => 'admin@example.com'
+</pre>
+    </p>
+
+    <h2>YAML</h2>
+    <p>
+      Given this YAML file:
 
 <pre>
 ---
@@ -99,7 +110,7 @@ AppConfig[:api_name]      # =&gt; 'Supr Webz 2.0'
 AppConfig[:api_key]       # =&gt; 'SUPERAWESOMESERVICE'
 </pre>
 
-      Want SQLite3?  No problem!
+      <h2>SQLite3</h2>
 
 <pre>
 AppConfig.setup do |config|
