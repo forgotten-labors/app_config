@@ -29,12 +29,37 @@
 		pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
+
+    #menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #eee;
+      border-right: 2px dashed #333;
+      border-bottom: 2px dashed #333;
+      padding: 5px 10px;
+      z-index: 1000;
+    }
+    #menu > a {
+      display: block;
+      text-decoration: none;
+    }
 	</style>
 
 </head>
 
 <body>
+  <a name="app_config"></a>
   <a href="http://github.com/Oshuma/app_config"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+
+  <div id="menu">
+    <a href="#app_config">AppConfig</a>
+    <a href="#install">- Install</a>
+    <a href="#use">- Use</a>
+    <a href="#yaml">- Storage::YAML</a>
+    <a href="#mongo">- Storage::Mongo</a>
+    <a href="#sqlite">- Storage::Sqlite</a>
+  </div>
 
   <div id="container">
 
@@ -58,28 +83,37 @@
 
     <p>An easy to use, customizable library to easily store and retrieve application configuration, API keys or basically anything in 'key/value' pairs.</p>
 
+    <a name="install"></a>
     <h2>Install</h2>
     <p>
-      From <a href="http://gemcutter.org/" title="Gemcutter">Gemcutter</a>:
-      <pre>$ sudo gem install app_config --source http://gemcutter.org</pre>
+      <pre>$ [sudo] gem install app_config</pre>
     </p>
 
 
+    <a name="use"></a>
     <h2>Use</h2>
     <p>
-      Usage is simple.  Just pass either a hash of options, or a block, to
-      <code>AppConfig.setup</code>.  See AppConfig::Base for a list of valid options.
-
-      As of version 0.4.1, if the <tt>:storage_method</tt> is not set, AppConfig
-      will act pretty much just like a normal Hash:
+      Usage is simple.  Just pass either a hash of options, or a block, to <code>AppConfig.setup</code>.
+      In it's simplest form, you can use it like so:
 
 <pre>
-AppConfig.setup(:email => 'admin@example.com')
-AppConfig[:email]    # => 'admin@example.com'
+AppConfig.setup(:admin_email =&gt; 'admin@example.com')
+# ..or..
+AppConfig.setup do |config|
+  config[:admin_email] = 'admin@example.com'
+end
+
+# Later on...
+# Strings or symbols as keys.
+AppConfig[:admin_email] # =&gt; 'admin@example.com'
 </pre>
+
+      You may also specify the <tt>:storage_method</tt> along with options specific to that storage method.
+      See <tt>AppConfig::Base</tt> for a list of valid storage methods.
     </p>
 
-    <h2>YAML</h2>
+    <a name="yaml"></a>
+    <h2>AppConfig::Storage::YAML</h2>
     <p>
       Given this YAML file:
 
@@ -109,9 +143,46 @@ AppConfig['admin_email']  # =&gt; 'admin@example.com'
 AppConfig[:api_name]      # =&gt; 'Supr Webz 2.0'
 AppConfig[:api_key]       # =&gt; 'SUPERAWESOMESERVICE'
 </pre>
+      </p>
 
-      <h2>SQLite3</h2>
+      <a name="mongo"></a>
+      <h2>AppConfig::Storage::Mongo</h2>
+      <p>
+        As of version 0.6.0, you can now use <tt>:mongo</tt> as the storage method.
+        The values are read/saved (by default) to the 'app_config' database and
+        'app_config' collection.  These defaults can be overridden, however, which
+        might lend well to versioned configurations; collection names such as
+        'app_config_v1', 'app_config_v2', etc.  Check the <tt>DEFAULTS</tt> constant
+        in <tt>AppConfig::Storage::Mongo</tt> for the default Mongo connection options.
 
+<pre>
+AppConfig.setup do |config|
+  config[:storage_method] = :mongo
+  config[:collection] = 'app_config_v2' # Or any valid Mongo collection name.
+
+  # Override an existing value:
+  config[:admin_email] = 'other_admin@example.com'
+end
+</pre>
+
+        If you wanted to read/update the configuration from the <tt>mongo</tt> client,
+        it would look something like this:
+
+<pre>
+$ mongo
+MongoDB shell version: 1.6.4
+connecting to: test
+&gt; use app_config
+switched to db app_config
+&gt; db.app_config.find()
+{ "_id" : ObjectId("4cddc317da98dd42f8000001"), "admin_email" : "admin@example.com" }
+&gt; db.app_config_v2.find()
+{ "_id" : ObjectId("4cddc317da98dd42f8000001"), "admin_email" : "other_admin@example.com" }
+</pre>
+      </p>
+
+      <a name="sqlite"></a>
+      <h2>AppConfig::Storage::Sqlite</h2>
 <pre>
 AppConfig.setup do |config|
   config[:storage_method] = :sqlite
@@ -122,7 +193,7 @@ AppConfig.setup do |config|
   config[:table] = 'app_config' # defaults to 'app_config'
 end
 
-AppConfig[:column]  # => 'value'
+AppConfig[:column]  # =&gt; 'value'
 </pre>
 
     </p>
